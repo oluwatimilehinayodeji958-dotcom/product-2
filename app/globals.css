@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #020617;
+  --accent: #4f46e5;
+  --accent-secondary: #0d9488;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #020617;
+    --foreground: #f8fafc;
+  }
+}
+
+html {
+  scroll-padding-top: 5rem;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .glass {
+    @apply bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl border border-white/20 dark:border-white/5;
+  }
+
+  .glass-card {
+    @apply bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border border-white/10 shadow-2xl;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-teal-400 to-indigo-600;
+  }
+
+  .bg-grid {
+    background-image: radial-gradient(circle at 2px 2px, rgba(99, 102, 241, 0.05) 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+
+  .neural-gradient {
+    background: radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.15) 0%, transparent 50%);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-indigo-500/20 rounded-full hover:bg-indigo-500/40 transition-colors;
+}
+
+/* Smooth transitions */
+* {
+  @apply transition-colors duration-300;
+}
+
+/* Animated grain texture */
+.grain {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 50;
+  animation: grain 8s steps(10) infinite;
+}
+
+@keyframes grain {
+  0%, 100% { transform:translate(0, 0) }
+  10% { transform:translate(-5%, -10%) }
+  20% { transform:translate(-15%, 5%) }
+  30% { transform:translate(7%, -25%) }
+  40% { transform:translate(-5%, 25%) }
+  50% { transform:translate(-15%, 10%) }
+  60% { transform:translate(15%, 0%) }
+  70% { transform:translate(0%, 15%) }
+  80% { transform:translate(3%, 35%) }
+  90% { transform:translate(-10%, 10%) }
+}
+
+/* ==========================================================================
+   Rich Text Editor & Article Detail Typography System
+   ========================================================================== */
+
+/* Headings */
+.editor-content h2, .prose h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  color: inherit;
+  line-height: 1.35;
+}
+
+.editor-content h3, .prose h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: inherit;
+  line-height: 1.4;
+}
+
+/* Paragraphs & general blocks */
+.editor-content p, .prose p {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  line-height: 1.75;
+}
+
+/* Unordered Lists */
+.editor-content ul, .prose ul {
+  list-style-type: disc !important;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem !important;
+}
+
+/* Ordered Lists */
+.editor-content ol, .prose ol {
+  list-style-type: decimal !important;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem !important;
+}
+
+/* List Items */
+.editor-content li, .prose li {
+  margin-bottom: 0.35rem;
+  line-height: 1.6;
+  display: list-item !important;
+}
+
+/* Blockquotes */
+.editor-content blockquote, .prose blockquote {
+  border-left: 4px solid #4f46e5; /* Accent Indigo */
+  padding-left: 1rem;
+  color: #4b5563; /* slate-600 */
+  font-style: italic;
+  margin: 1.5rem 0;
+}
+
+.dark .editor-content blockquote, .dark .prose blockquote {
+  color: #9ca3af; /* slate-400 */
+}
+
+/* Images: Centered, rounded, moderate size */
+.editor-content img, .prose img {
+  max-width: 450px !important;
+  width: 100%;
+  height: auto;
+  margin: 1.75rem auto !important;
+  display: block;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .editor-content img, .dark .prose img {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Links */
+.editor-content a, .prose a {
+  color: #4f46e5;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.dark .editor-content a, .dark .prose a {
+  color: #818cf8;
+}
+
+/* Reset transitions inside contenteditable to prevent cursor jumping/lag */
+.editor-content * {
+  transition: none !important;
+}
