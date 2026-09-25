@@ -1248,23 +1248,25 @@ export default function EditorialPortal() {
       end_date: "", 
       status: "ongoing", 
       image_url: "", 
-      is_featured: false 
+      is_featured: false,
+      imageFile: null
     });
     setShowResearchModal(true);
   };
 
   const handleEditResearch = (item: SupabaseResearchProject) => {
     setEditingResearch(item);
-    setResearchFormData({ 
-      title: item.title, 
-      description: item.description || "", 
-      lead_investigator: item.lead_investigator || "", 
-      funding_source: item.funding_source || "", 
-      start_date: item.start_date || "", 
-      end_date: item.end_date || "", 
-      status: item.status, 
-      image_url: item.image_url || "", 
-      is_featured: item.is_featured || false 
+    setResearchFormData({
+      title: item.title,
+      description: item.description || "",
+      lead_investigator: item.lead_investigator || "",
+      funding_source: item.funding_source || "",
+      start_date: item.start_date || "",
+      end_date: item.end_date || "",
+      status: item.status as "ongoing" | "completed",
+      image_url: item.image_url || "",
+      is_featured: item.is_featured || false,
+      imageFile: null
     });
     setShowResearchModal(true);
   };
@@ -2104,7 +2106,7 @@ export default function EditorialPortal() {
 
   const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    setImageFormData(prev => ({ ...prev, imageFile: file }));
+    setImageFormData(prev => ({ ...prev, imageFile: file ?? null }));
   };
 
   const handleEditImage = (img: any) => {
@@ -2165,7 +2167,7 @@ export default function EditorialPortal() {
         event_date: imageFormData.event_date,
       };
 
-      let savedItem;
+      let savedItem: any;
       if (editingImage) {
         const updated = await updateGalleryImage(editingImage.id, payload);
         if (!updated) {
@@ -3422,20 +3424,20 @@ export default function EditorialPortal() {
                             <td className="px-6 py-4">
                               <div className="flex items-center gap-3">
                                 <div className="h-12 w-12 overflow-hidden rounded-3xl bg-slate-100 dark:bg-slate-800">
-                                  <img src={member.profileImage} alt={member.name} className="h-full w-full object-cover" />
+                                  <img src={member.image_url || '/default-avatar.png'} alt={member.full_name} className="h-full w-full object-cover" />
                                 </div>
                                 <div>
-                                  <div className="font-semibold text-slate-900 dark:text-white">{member.name}</div>
+                                  <div className="font-semibold text-slate-900 dark:text-white">{member.full_name}</div>
                                   <div className="text-xs text-slate-500 dark:text-slate-400">{member.email}</div>
                                 </div>
                               </div>
                             </td>
                             <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{member.role}</td>
-                            <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{member.department}</td>
-                            <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{member.category}</td>
+                            <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{member.title || '-'}</td>
+                            <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{member.title || '-'}</td>
                             <td className="px-6 py-4">
-                              <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase ${member.active ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"}`}>
-                                {member.active ? "Active" : "Inactive"}
+                              <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase ${member.is_active ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"}`}>
+                                {member.is_active ? "Active" : "Inactive"}
                               </span>
                             </td>
                             <td className="px-6 py-4 text-right">
@@ -3493,7 +3495,8 @@ export default function EditorialPortal() {
                           image_url: "",
                           featured: false,
                           display_order: galleryImagesList.length + 1,
-                          event_date: new Date().toISOString().split('T')[0]
+                          event_date: new Date().toISOString().split('T')[0],
+                          imageFile: null
                         });
                         setShowImageModal(true);
                       }}
@@ -3997,7 +4000,7 @@ export default function EditorialPortal() {
                   />
                   {teamFormData.cv_url && (
                     <div className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                      Current: {typeof teamFormData.cv_url === 'string' ? teamFormData.cv_url : teamFormData.cv_url.name}
+                      Current: {typeof teamFormData.cv_url === 'string' ? teamFormData.cv_url : (teamFormData.cv_url as any).name}
                     </div>
                   )}
                 </label>

@@ -40,7 +40,7 @@ export default function GalleryPage() {
         }
 
         const images = items
-          .filter((item) => !item.video_type)
+          .filter((item) => !('video_type' in item))
           .map((item) => ({
             id: item.id,
             title: item.title || "Untitled",
@@ -57,20 +57,20 @@ export default function GalleryPage() {
           })) as GalleryImage[];
 
         const videos = items
-          .filter((item) => !!item.video_type)
+          .filter((item) => 'video_type' in item)
           .map((item) => ({
             id: item.id,
             title: item.title || "Untitled Video",
             caption: item.caption || "",
             category: item.category || "Laboratory",
-            video_type: (item.video_type as GalleryVideo["video_type"]) || "youtube",
-            video_url: item.video_url || "",
-            thumbnail_url: item.thumbnail_url || "",
+            video_type: (item as any).video_type || "youtube",
+            video_url: (item as any).video_url || "",
+            thumbnail_url: (item as any).thumbnail_url || "",
             featured: !!item.featured,
             display_order: item.display_order || 0,
             event_date: item.event_date || "",
             created_at: item.created_at,
-            duration: item.duration,
+            duration: (item as any).duration,
           })) as GalleryVideo[];
 
         setAllImages(images);
